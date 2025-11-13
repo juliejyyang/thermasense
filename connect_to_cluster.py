@@ -1,3 +1,4 @@
+import pymongo
 from pymongo import MongoClient
 
 # Replace these with your actual credentials
