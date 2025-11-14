@@ -1,7 +1,5 @@
 # hospital-delirium-alert
 
-# Runtime requirements
-
 ## install dependencies
 `pip install -r requirements.txt`
 
