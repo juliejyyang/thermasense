@@ -114,7 +114,7 @@
             
             let html = '';
             
-            // High Risk (Red)
+            // red - high risk
             if (data.red && data.red.length > 0) {
                 html += `
                     <div class="risk-section">
@@ -126,7 +126,7 @@
                 `;
             }
             
-            // Moderate Risk (Yellow)
+            // yellow - medium risk
             if (data.yellow && data.yellow.length > 0) {
                 html += `
                     <div class="risk-section">
@@ -138,7 +138,7 @@
                 `;
             }
             
-            // Low Risk (Green)
+            // green - low risk
             if (data.green && data.green.length > 0) {
                 html += `
                     <div class="risk-section">

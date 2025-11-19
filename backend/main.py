@@ -129,7 +129,7 @@ async def stream_data():
                 if p and p.strip():
                     token = p.strip()
                     break
-
+            
             # extract first numeric substring if token contains extras
             if token:
                 m = NUMBER_RE.search(token)
