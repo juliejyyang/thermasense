@@ -5,6 +5,7 @@ connection = None
 # connect to arduino
 def connect_arduino(port='/dev/cu.usbmodem101', baudrate=9600):
     global connection
+    # troubleshooting
     try:
         connection = serial.Serial(port=port, baudrate=baudrate, timeout=1)
         print(f"Connected to Arduino on {port}")
@@ -13,11 +14,14 @@ def connect_arduino(port='/dev/cu.usbmodem101', baudrate=9600):
 
 # read one temperature from arduino
 def read_temperature():
-    if connection and connection.in_waiting:
+    if connection:
         try:
-            line = connection.readline().decode('utf-8').strip()
-            return line
-        except:
+            connection.timeout = 1  # 1 second timeout
+            if connection.in_waiting:
+                line = connection.readline().decode('utf-8').strip()
+                return line
+        except Exception as e:
+            print(f"Error reading from Arduino: {e}")
             return None
     return None
 

@@ -112,7 +112,12 @@
         <div class="current-temp" id="temp">Waiting...</div>
         
         <h3>Live Temperature Chart (Last 60 readings)</h3>
-        <canvas id="liveTempChart" width="800" height="300"></canvas>
+
+        <!-- temperature display chart -->
+         <div>
+            <canvas id="liveTempChart" style="max-height: 400px;"></canvas>
+         </div>
+
     </div>
     
     <div class="chart-container">
@@ -203,7 +208,8 @@
             options: {
                 animation: false,
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
+                aspectRatio: 2.5,
                 scales: {
                     x: { 
                         display: true,

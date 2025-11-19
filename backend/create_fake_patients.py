@@ -1,4 +1,4 @@
-from db import connect_db
+from backend.db import connect_db, db
 from datetime import datetime, timezone
 import random
 

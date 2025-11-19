@@ -21,7 +21,8 @@ from backend.db import (
     get_all_patients, # gets all patients - called in background task and dashboard endpoint
     store_score, # saves variability score - background task
     create_alert, # creates alert - when score is high
-    ack_alert # marks alert as acknolwedge by nurse
+    ack_alert, # marks alert as acknolwedge by nurse
+    db
 )
 
 # imports some more functions
@@ -89,8 +90,7 @@ app.mount("/static", StaticFiles(directory=Path(__file__).parent.parent /"fronte
 # --- endpoints --- #
 
 # home page - shows webpage running
-
-@app.get("/dashboard")
+@app.get("/")
 async def dashboard():
     # return the dynamic HTML so the page and SSE are same-origin
     base = Path(__file__).parent.parent
@@ -130,13 +130,13 @@ async def stream_data():
                     token = p.strip()
                     break
             
-            # extract first numeric substring if token contains extras
+            # Extract temperature value after "Temp °C:"
             if token:
-                m = NUMBER_RE.search(token)
-                if m:
-                    s = m.group(0)
+                # Look for "Temp °C: " followed by a number
+                temp_match = re.search(r'Temp °C:\s*([-\d.]+)', token)
+                if temp_match:
                     try:
-                        val = float(s)
+                        val = float(temp_match.group(1))
                     except Exception:
                         val = None
                 else:
@@ -148,12 +148,13 @@ async def stream_data():
             if val is None or val < 10 or val > 60:
                 # ignore bad values, send keep-alive or debug comment
                 yield ": invalid\n\n"
+                print(f"DEBUG: decoded = {raw_temp}")  # ADD THIS
             else:
                 # insert into DB off-loop if needed
                 await asyncio.to_thread(insert_reading, patient_id, val)
                 yield f"data: {val}\n\n"
 
-            await asyncio.sleep(30)
+            await asyncio.sleep(5)
     return StreamingResponse(generate(), media_type="text/event-stream")
 
 # dashboard endpoint that returns all patients organized into the alert tiers
