@@ -125,16 +125,16 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Get patient ID from URL
+        // get patient ID from URL
         const urlParams = new URLSearchParams(window.location.search);
         const patientId = urlParams.get('id');
         
         if (!patientId) {
-            // Default to Naru Crunchy if no ID provided
+            // FOR NOW - defualts to Naru Crunchy if no ID provided
             console.log('No patient ID, loading default');
         }
 
-        // Load patient details
+        // loads patient details
         async function loadPatientDetails() {
             if (!patientId) return;
             
@@ -147,13 +147,13 @@
                     return;
                 }
                 
-                // Update patient info
+                // updates patient info
                 document.getElementById('patientName').textContent = data.patient.name;
                 document.getElementById('roomNumber').textContent = data.patient.room;
                 document.getElementById('daysAdmitted').textContent = data.patient.days_admitted;
                 document.getElementById('baselineTemp').textContent = data.patient.baseline_temp + '°C';
                 
-                // Update score if available
+                // updates score if available
                 if (data.scores && data.scores.length > 0) {
                     const latestScore = data.scores[0].score;
                     updateScoreDisplay(latestScore);
@@ -182,7 +182,7 @@
             }
         }
 
-        // Live temperature chart
+        // makes live temperature chart
         const canvas = document.getElementById('liveTempChart');
         const ctx = canvas.getContext('2d');
         const MAX_POINTS = 60;
@@ -252,10 +252,10 @@
             document.getElementById('temp').textContent = 'Connection lost';
         };
 
-        // Load patient details on page load
+        // loads patient details on page load
         loadPatientDetails();
         
-        // Refresh patient details every minute
+        // refreshes patient details every minute
         setInterval(loadPatientDetails, 60000);
     </script>
 </body>
