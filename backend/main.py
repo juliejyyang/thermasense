@@ -101,7 +101,10 @@ async def patient():
     base = Path(__file__).parent.parent
     return HTMLResponse(base.joinpath("frontend","patient.html").read_text(encoding="utf-8"))
 
+# properly format the tempearture readings
 NUMBER_RE = re.compile(r"-?\d+(\.\d+)?")
+
+# real monitor data is going to be stored in this patient ID
 patient_id = ObjectId("691bcd11af15fc8ebcb9316a")
 
 # endpoint that streams live temperature data from arduino
@@ -111,16 +114,13 @@ async def stream_data():
     async def generate():
         while True:
             raw_temp = await asyncio.to_thread(read_temperature)
-
             # normalize bytes -> str
             if isinstance(raw_temp, (bytes, bytearray)):
                 raw_temp = raw_temp.decode(errors="ignore")
-            
             if not raw_temp:
                 yield ": keep-alive\n\n"
                 await asyncio.sleep(0.2)
                 continue
-
             # split into lines (handle fragmented/concatenated input)
             parts = re.split(r'[\r\n]+', str(raw_temp))
             # pick last non-empty part (most recent complete token)
