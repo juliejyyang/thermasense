@@ -7,5 +7,5 @@
 edit .env with your MongoDB URI
 cp .env.example .env
 
-# run
-`python -m uvicorn main:app --reload`
+# run (root directory)
+`python -m uvicorn backend.main:app --reload`
